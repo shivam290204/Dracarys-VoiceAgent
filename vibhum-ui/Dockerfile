@@ -11,8 +11,8 @@ RUN apk add --no-cache python3 make g++ libc6-compat
 # Copy package files
 COPY vibhum-ui/package*.json ./
 
-# Clean install with proper handling of native modules
-RUN --mount=type=cache,target=/root/.npm npm ci
+# Install with proper handling of native modules (using install instead of ci for cross-platform lockfile compatibility)
+RUN --mount=type=cache,target=/root/.npm npm install
 
 # Stage 2: Builder
 FROM node:22-alpine AS builder
