@@ -27,12 +27,12 @@ import AddNodePanel from "../../../components/flow/AddNodePanel";
 import CustomEdge from "../../../components/flow/edges/CustomEdge";
 import { GenericNode } from "../../../components/flow/nodes/GenericNode";
 import { PhoneCallDialog } from './components/PhoneCallDialog';
+import { SimpleWorkflowView } from './components/SimpleWorkflowView';
 import { VersionHistoryPanel } from './components/VersionHistoryPanel';
 import type { WorkflowRuntimeNodeTransition } from './components/workflow-tester/types';
 import { WorkflowEditorHeader } from "./components/WorkflowEditorHeader";
 import { WorkflowTesterPanel } from './components/WorkflowTesterPanel';
 import { WorkflowVersionDiffDialog } from './components/WorkflowVersionDiffDialog';
-import { SimpleWorkflowView } from './components/SimpleWorkflowView';
 import { WorkflowProvider } from "./contexts/WorkflowContext";
 import { useWorkflowState } from "./hooks/useWorkflowState";
 import { layoutNodes } from './utils/layoutNodes';
@@ -600,7 +600,7 @@ function RenderWorkflow({
                 {/* Workflow Canvas */}
                 <div className="flex-1 min-h-0">
                     {isSimpleMode ? (
-                        <SimpleWorkflowView 
+                        <SimpleWorkflowView
                             workflowName={workflowName}
                             workflowId={workflowId}
                             nodes={nodes}
@@ -685,7 +685,7 @@ function RenderWorkflow({
                                                         <p>Workflow settings</p>
                                                     </TooltipContent>
                                                 </Tooltip>
-                                                
+
                                                 <Tooltip>
                                                     <TooltipTrigger asChild>
                                                         <Button

@@ -78,7 +78,7 @@ export async function middleware(request: NextRequest) {
         userEmail = parsed.email || '';
       } catch {}
     }
-    
+
     const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS || '';
     if (adminEmails && adminEmails !== '*') {
       const emails = adminEmails.split(',').map(e => e.trim().toLowerCase());

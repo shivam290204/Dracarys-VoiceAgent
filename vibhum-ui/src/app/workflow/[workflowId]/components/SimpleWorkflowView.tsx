@@ -1,14 +1,14 @@
+import { Bot, Save } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+
+import { FlowNode } from '@/components/flow/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useWorkflowState } from '../hooks/useWorkflowState';
-import { toast } from 'sonner';
-import { Bot, Save } from 'lucide-react';
-import { FlowNode } from '@/components/flow/types';
+import { Textarea } from '@/components/ui/textarea';
+
 
 interface SimpleWorkflowViewProps {
     workflowName: string;
@@ -43,7 +43,7 @@ export function SimpleWorkflowView({
 
     useEffect(() => {
         setLocalName(workflowName);
-        
+
         if (startNode && startNode.data && typeof startNode.data.prompt === 'string') {
             setLocalObjective(startNode.data.prompt);
         }
@@ -89,7 +89,7 @@ export function SimpleWorkflowView({
                 };
                 await saveWorkflowConfigurations(updatedConfigs, localName);
             }
-            
+
             toast.success("Agent settings saved successfully!");
         } catch (error) {
             toast.error("Failed to save agent settings");
@@ -120,9 +120,9 @@ export function SimpleWorkflowView({
                     <CardContent className="space-y-6 pt-6">
                         <div className="space-y-2">
                             <Label htmlFor="agent-name" className="text-base font-semibold">Agent Name</Label>
-                            <Input 
+                            <Input
                                 id="agent-name"
-                                value={localName} 
+                                value={localName}
                                 onChange={(e) => setLocalName(e.target.value)}
                                 className="max-w-md bg-white dark:bg-zinc-950"
                                 placeholder="e.g. Customer Support Agent"
@@ -138,7 +138,7 @@ export function SimpleWorkflowView({
                     </CardHeader>
                     <CardContent className="pt-6">
                         <div className="space-y-2">
-                            <Textarea 
+                            <Textarea
                                 value={localObjective}
                                 onChange={(e) => setLocalObjective(e.target.value)}
                                 className="min-h-[250px] font-mono text-sm bg-white dark:bg-zinc-950 leading-relaxed"

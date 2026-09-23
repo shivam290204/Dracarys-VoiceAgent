@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleDollarSign,
+  Clock,
   Database,
   FileText,
   Home,
@@ -21,7 +22,6 @@ import {
   UserRound,
   Workflow,
   Wrench,
-  Clock,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";

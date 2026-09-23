@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@/lib/auth";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -13,13 +12,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { useAuth } from "@/lib/auth";
 
 export default function BusinessHoursPage() {
   const { user, getAccessToken } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [workflows, setWorkflows] = useState<any[]>([]);
-  
+
   const [enabled, setEnabled] = useState(false);
   const [timezone, setTimezone] = useState("UTC");
   const [afterHoursWorkflowId, setAfterHoursWorkflowId] = useState<string>("");
@@ -61,7 +62,7 @@ export default function BusinessHoursPage() {
           const wfData = await wfRes.json();
           setWorkflows(wfData || []);
         }
-        
+
         if (bwRes.ok) {
           const data = await bwRes.json();
           setEnabled(data.enabled ?? false);
@@ -130,7 +131,7 @@ export default function BusinessHoursPage() {
       <div>
         <h1 className="text-2xl font-bold">Business Hours & Routing</h1>
         <p className="text-gray-500 mt-2">
-          Configure when your business is open. Calls received outside these hours 
+          Configure when your business is open. Calls received outside these hours
           will automatically route to your designated After-Hours agent.
         </p>
       </div>
@@ -192,8 +193,8 @@ export default function BusinessHoursPage() {
                   return (
                     <div key={day} className="flex items-center space-x-4">
                       <div className="w-32 flex items-center space-x-2">
-                        <Switch 
-                          checked={isOpen} 
+                        <Switch
+                          checked={isOpen}
                           onCheckedChange={(c) => handleDayChange(day, c)}
                         />
                         <span className="capitalize">{day}</span>
