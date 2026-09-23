@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 
 export default function BusinessHoursPage() {
-  const { session } = useAuth();
+  const { user, getAccessToken } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [workflows, setWorkflows] = useState<any[]>([]);
@@ -45,14 +45,15 @@ export default function BusinessHoursPage() {
 
   useEffect(() => {
     async function loadData() {
-      if (!session) return;
+      if (!user) return;
       try {
+        const token = await getAccessToken();
         const [bwRes, wfRes] = await Promise.all([
           fetch("/api/v1/organizations/business-hours", {
-            headers: { Authorization: `Bearer ${session.access_token}` },
+            headers: { Authorization: `Bearer ${token}` },
           }),
           fetch("/api/v1/workflows", {
-            headers: { Authorization: `Bearer ${session.access_token}` },
+            headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
 
@@ -87,16 +88,17 @@ export default function BusinessHoursPage() {
       }
     }
     loadData();
-  }, [session]);
+  }, [user]);
 
   const handleSave = async () => {
     setSaving(true);
     try {
+      const token = await getAccessToken();
       const res = await fetch("/api/v1/organizations/business-hours", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           enabled,
