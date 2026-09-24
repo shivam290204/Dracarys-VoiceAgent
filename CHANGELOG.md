@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.47.1 (2026-09-24)
+
+<!-- Release notes generated using configuration in .github/release.yml at main -->
+
+
+
+**Full Changelog**: https://github.com/shivam290204/Dracarys-VoiceAgent/compare/dograh-v1.47.0...dograh-v1.47.1
+
 ## 1.47.0 (2026-09-15)
 
 <!-- Release notes generated using configuration in .github/release.yml at main -->
