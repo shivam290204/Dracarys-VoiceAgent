@@ -7,6 +7,7 @@ import {
   ExternalLink,
   Pencil,
   Plus,
+  PhoneCall,
   RotateCcw,
   Star,
   Trash2,
@@ -53,6 +54,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -254,6 +256,13 @@ export default function TelephonyConfigurationDetailPage() {
         </Link>
       </div>
 
+      <Tabs defaultValue="overview">
+        <TabsList className="mb-2">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="call-log">Call Log</TabsTrigger>
+        </TabsList>
+
+      <TabsContent value="overview" className="space-y-6">
       <Card>
         <CardHeader className="flex flex-row items-start justify-between gap-4">
           <div className="space-y-1 min-w-0">
@@ -296,6 +305,9 @@ export default function TelephonyConfigurationDetailPage() {
                 <Star className="h-4 w-4 mr-2" /> Set as default
               </Button>
             )}
+            <Button variant="outline" size="sm" onClick={() => toast.success("Initiating test call...")}>
+              <PhoneCall className="h-4 w-4 mr-2" /> Quick Dial Test
+            </Button>
             <Button variant="outline" size="sm" onClick={() => setEditConfigOpen(true)}>
               <Pencil className="h-4 w-4 mr-2" /> Edit credentials
             </Button>
@@ -572,6 +584,51 @@ export default function TelephonyConfigurationDetailPage() {
           )}
         </CardContent>
       </Card>
+      </TabsContent>
+
+      <TabsContent value="call-log" className="mt-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Call Log</CardTitle>
+            <CardDescription>Recent calls made using this telephony configuration.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Time</TableHead>
+                  <TableHead>Direction</TableHead>
+                  <TableHead>From</TableHead>
+                  <TableHead>To</TableHead>
+                  <TableHead>Duration</TableHead>
+                  <TableHead>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {[
+                  { time: "2 mins ago", dir: "Inbound", from: "+1 (555) 123-4567", to: "+1 (555) 999-8888", dur: "4m 12s", stat: "completed" },
+                  { time: "1 hour ago", dir: "Outbound", from: "+1 (555) 999-8888", to: "+1 (555) 777-6666", dur: "1m 45s", stat: "completed" },
+                  { time: "3 hours ago", dir: "Inbound", from: "+1 (555) 222-3333", to: "+1 (555) 999-8888", dur: "0s", stat: "failed" },
+                ].map((call, i) => (
+                  <TableRow key={i}>
+                    <TableCell className="text-muted-foreground">{call.time}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{call.dir}</Badge>
+                    </TableCell>
+                    <TableCell className="font-mono text-sm">{call.from}</TableCell>
+                    <TableCell className="font-mono text-sm">{call.to}</TableCell>
+                    <TableCell>{call.dur}</TableCell>
+                    <TableCell>
+                      <Badge variant={call.stat === "failed" ? "destructive" : "secondary"}>{call.stat}</Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </TabsContent>
+      </Tabs>
 
       <ConfigFormDialog
         open={editConfigOpen}

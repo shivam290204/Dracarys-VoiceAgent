@@ -13,6 +13,13 @@ import type { RecordingResponseSchema } from "@/client/types.gen";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+} from "@/components/ui/sheet";
 import { useAudioPlayback } from "@/hooks/useAudioPlayback";
 import { useOrganizationTimezone } from "@/hooks/useOrganizationTimezone";
 import { formatDateTime } from "@/lib/dateTime";
@@ -29,6 +36,7 @@ export default function RecordingsList({ refreshKey }: { refreshKey?: number }) 
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editValue, setEditValue] = useState("");
     const [editError, setEditError] = useState<string | null>(null);
+    const [transcriptSheetRec, setTranscriptSheetRec] = useState<RecordingResponseSchema | null>(null);
 
     const { playingId, toggle: togglePlayback, stop: stopPlayback } = useAudioPlayback();
 
@@ -191,6 +199,26 @@ export default function RecordingsList({ refreshKey }: { refreshKey?: number }) 
                 </Button>
             </div>
 
+            {/* Filters */}
+            <div className="flex items-center gap-3">
+                <select className="h-8 rounded-md border border-input bg-background px-3 text-xs ring-offset-background">
+                    <option>All Agents</option>
+                    <option>Sales Agent</option>
+                    <option>Support Agent</option>
+                </select>
+                <select className="h-8 rounded-md border border-input bg-background px-3 text-xs ring-offset-background">
+                    <option>All Dates</option>
+                    <option>Today</option>
+                    <option>Last 7 Days</option>
+                </select>
+                <select className="h-8 rounded-md border border-input bg-background px-3 text-xs ring-offset-background">
+                    <option>Any Duration</option>
+                    <option>&lt; 1 min</option>
+                    <option>1-5 mins</option>
+                    <option>&gt; 5 mins</option>
+                </select>
+            </div>
+
             {/* Results count */}
             <div className="text-sm text-muted-foreground">
                 {filteredRecordings.length} recording{filteredRecordings.length !== 1 ? "s" : ""}
@@ -282,9 +310,42 @@ export default function RecordingsList({ refreshKey }: { refreshKey?: number }) 
                                             </p>
                                         )}
                                         {/* Transcript */}
-                                        <p className="text-sm text-muted-foreground line-clamp-1 mb-1">
-                                            {rec.transcript}
-                                        </p>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <p className="text-sm text-muted-foreground line-clamp-1 flex-1">
+                                                {rec.transcript}
+                                            </p>
+                                            {rec.transcript && (
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 px-2 text-[10px] uppercase tracking-wider"
+                                                    onClick={() => setTranscriptSheetRec(rec)}
+                                                >
+                                                    View Transcript
+                                                </Button>
+                                            )}
+                                        </div>
+                                        {/* Waveform Mock Inline Player */}
+                                        <div className="flex items-center gap-3 bg-muted/20 p-2 rounded-md mb-2">
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 w-8 rounded-full p-0 shrink-0"
+                                                onClick={() => handlePlay(rec)}
+                                            >
+                                                {playingId === rec.recording_id ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                                            </Button>
+                                            <div className="flex-1 flex items-center gap-0.5 h-6">
+                                                {Array.from({ length: 40 }).map((_, i) => (
+                                                    <div 
+                                                        key={i} 
+                                                        className={`w-1 rounded-full transition-all duration-300 ${playingId === rec.recording_id ? "bg-primary animate-pulse" : "bg-muted-foreground/30"}`}
+                                                        style={{ height: `${20 + Math.random() * 80}%`, animationDelay: `${i * 0.05}s` }}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <span className="text-xs font-mono text-muted-foreground shrink-0">0:00 / 0:42</span>
+                                        </div>
                                         <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
                                             <span>{formatDateTime(rec.created_at, organizationTimezone)}</span>
                                         </div>
@@ -316,6 +377,24 @@ export default function RecordingsList({ refreshKey }: { refreshKey?: number }) 
                     })}
                 </div>
             )}
+
+            <Sheet open={!!transcriptSheetRec} onOpenChange={(o) => !o && setTranscriptSheetRec(null)}>
+                <SheetContent className="w-[400px] sm:w-[540px]">
+                    <SheetHeader>
+                        <SheetTitle>Transcript</SheetTitle>
+                        <SheetDescription>
+                            {transcriptSheetRec?.recording_id}
+                        </SheetDescription>
+                    </SheetHeader>
+                    <div className="mt-6 space-y-4">
+                        <div className="rounded-xl border border-border/40 bg-muted/10 p-4">
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                                {transcriptSheetRec?.transcript || "No transcript available."}
+                            </p>
+                        </div>
+                    </div>
+                </SheetContent>
+            </Sheet>
         </div>
     );
 }

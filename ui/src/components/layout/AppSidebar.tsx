@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   ArrowUpCircle,
   AudioLines,
+  BarChart2,
   Brain,
   ChevronLeft,
   ChevronRight,
@@ -12,13 +13,15 @@ import {
   FileText,
   Home,
   Key,
+  Library,
   LogOut,
   type LucideIcon,
   Megaphone,
+  MessageSquare,
+  Mic,
   Phone,
   Settings,
   TrendingUp,
-  UserRound,
   Workflow,
   Wrench,
 } from "lucide-react";
@@ -54,10 +57,8 @@ import {
 } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useAppConfig } from "@/context/AppConfigContext";
-import { useLeadForms } from "@/context/LeadFormsContext";
 import { useTelephonyConfigWarnings } from "@/context/TelephonyConfigWarningsContext";
 import { useLatestReleaseVersion } from "@/hooks/useLatestReleaseVersion";
-import type { LocalUser } from "@/lib/auth";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
@@ -65,6 +66,7 @@ type SidebarNavItem = {
   title: string;
   url: string;
   icon: LucideIcon;
+  badge?: string | number;
   showsTelephonyWarning?: boolean;
 };
 
@@ -82,6 +84,21 @@ const NAV_SECTIONS: SidebarNavSection[] = [
         title: "Overview",
         url: "/overview",
         icon: Home,
+      },
+    ],
+  },
+  {
+    label: "INTERACT",
+    items: [
+      {
+        title: "Live Chat",
+        url: "/live-chat",
+        icon: Mic,
+      },
+      {
+        title: "AI Chat",
+        url: "/chat",
+        icon: MessageSquare,
       },
     ],
   },
@@ -107,6 +124,7 @@ const NAV_SECTIONS: SidebarNavSection[] = [
         title: "Telephony",
         url: "/telephony-configurations",
         icon: Phone,
+        badge: 3, // Mock live calls count
         showsTelephonyWarning: true,
       },
       {
@@ -125,6 +143,11 @@ const NAV_SECTIONS: SidebarNavSection[] = [
         icon: AudioLines,
       },
       {
+        title: "Prompts",
+        url: "/prompts",
+        icon: Library,
+      },
+      {
         title: "Developers",
         url: "/api-keys",
         icon: Key,
@@ -138,6 +161,11 @@ const NAV_SECTIONS: SidebarNavSection[] = [
         title: "Agent Runs",
         url: "/usage",
         icon: TrendingUp,
+      },
+      {
+        title: "Analytics",
+        url: "/analytics",
+        icon: BarChart2,
       },
       {
         title: "Billing",
@@ -159,7 +187,6 @@ export function AppSidebar() {
   const { state, isMobile, setOpenMobile } = useSidebar();
   const { provider, logout, user } = useAuth();
   const { config } = useAppConfig();
-  const { openHireExpert } = useLeadForms();
   const {
     telnyxMissingWebhookPublicKeyCount,
     vonageMissingSignatureSecretCount,
@@ -244,6 +271,11 @@ export function AppSidebar() {
           >
             {item.title}
           </span>
+          {!isCollapsed && item.badge !== undefined && (
+            <span className="ml-auto inline-flex h-5 items-center justify-center rounded-full bg-emerald-500/15 px-2 text-[10px] font-bold text-emerald-500">
+              {item.badge}
+            </span>
+          )}
           {showWarningDot && (
             isCollapsed ? (
               warningIndicator
@@ -268,7 +300,7 @@ export function AppSidebar() {
   const displayIdentity =
     user?.displayName ||
     (user as { primaryEmail?: string } | undefined)?.primaryEmail ||
-    (user as LocalUser | undefined)?.email ||
+    (user as { email?: string } | undefined)?.email ||
     "";
   const userInitials =
     displayIdentity
@@ -285,35 +317,6 @@ export function AppSidebar() {
       className="h-7 w-7 shrink-0 cursor-pointer rounded-full border border-border/80 bg-muted/40 hover:bg-muted/60"
     >
       <span className="text-xs font-medium">{userInitials}</span>
-    </Button>
-  );
-
-  // "Hire an Expert" CTA, rendered INSIDE the shared footer pill next to the
-  // profile icon. Expanded: label pill filling the row. Collapsed: icon-only.
-  const hireExpertButton = isCollapsed ? (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          size="icon"
-          className="h-7 w-7 rounded-full"
-          onClick={() => openHireExpert("sidebar")}
-          aria-label="Hire an Expert"
-        >
-          <UserRound className="h-3.5 w-3.5" />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent side="right">
-        <p>Hire an Expert</p>
-      </TooltipContent>
-    </Tooltip>
-  ) : (
-    <Button
-      size="sm"
-      className="h-7 gap-1.5 rounded-full px-3 text-xs"
-      onClick={() => openHireExpert("sidebar")}
-    >
-      <UserRound className="h-3.5 w-3.5" />
-      Hire an Expert
     </Button>
   );
 
@@ -341,7 +344,7 @@ export function AppSidebar() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <a
-                    href="https://docs.dograh.com/deployment/update"
+                    href="https://github.com/dograh-hq/dograh/releases"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 rounded-md border bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium leading-none text-amber-900 transition-opacity hover:opacity-80 dark:bg-amber-950 dark:text-amber-200"
@@ -432,8 +435,8 @@ export function AppSidebar() {
                 <DropdownMenuContent side="top" align="start" className="w-56">
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      {(user as LocalUser | undefined)?.email && (
-                        <p className="text-xs text-muted-foreground">{(user as LocalUser).email}</p>
+                      {(user as { email?: string } | undefined)?.email && (
+                        <p className="text-xs text-muted-foreground">{(user as { email?: string }).email}</p>
                       )}
                     </div>
                   </DropdownMenuLabel>
@@ -448,7 +451,6 @@ export function AppSidebar() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              {hireExpertButton}
             </div>
           )}
 
@@ -475,10 +477,6 @@ export function AppSidebar() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => router.push("/handler/account-settings")} className="cursor-pointer">
-                    <Settings className="mr-2 h-4 w-4" />
-                    Account settings
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push("/settings")} className="cursor-pointer">
                     <Settings className="mr-2 h-4 w-4" />
                     Platform Settings
@@ -489,7 +487,6 @@ export function AppSidebar() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              {hireExpertButton}
             </div>
           )}
 

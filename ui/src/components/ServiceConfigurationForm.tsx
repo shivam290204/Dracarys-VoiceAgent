@@ -875,6 +875,32 @@ export function ServiceConfigurationForm({
             );
         }
 
+        if (numberSchema && (field === "temperature" || field === "top_p" || field === "max_tokens")) {
+            const min = numberSchema.minimum ?? 0;
+            const max = numberSchema.maximum ?? (field === "max_tokens" ? 4096 : (field === "temperature" ? 2 : 1));
+            const step = field === "max_tokens" ? 1 : 0.01;
+            const val = watch(`${service}_${field}`);
+
+            return (
+                <div className="space-y-3 pt-1">
+                    <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">{val !== undefined ? val : (actualSchema?.default ?? 0)}</span>
+                    </div>
+                    <input
+                        type="range"
+                        min={min}
+                        max={max}
+                        step={step}
+                        className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                        {...register(`${service}_${field}`, {
+                            required: service !== "embeddings" && providerSchema.required?.includes(field),
+                            setValueAs: (value: string) => value === "" ? undefined : Number(value),
+                        })}
+                    />
+                </div>
+            );
+        }
+
         return (
             <Input
                 type={numberSchema ? "number" : "text"}

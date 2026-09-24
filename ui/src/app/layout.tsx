@@ -34,7 +34,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Dracarys",
-  description: "Open Source Voice Assistant Workflow Builder",
+  description: "Dracarys — Build and deploy voice AI agents with telephony and WebRTC support",
 };
 
 export default function RootLayout({
