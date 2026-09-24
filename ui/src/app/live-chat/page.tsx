@@ -1,6 +1,7 @@
 "use client";
 
 import { Mic, MicOff, Phone, PhoneOff, Settings2, Volume2, VolumeX } from "lucide-react";
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { getWorkflowsApiV1WorkflowFetchGet } from "@/client/sdk.gen";
@@ -93,7 +94,8 @@ function WaveformVisualizer({
         for (let i = 0; i < data.length; i++) {
           const v = data[i] / 128.0;
           const y = (v * canvas!.height) / 2;
-          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
           x += sliceW;
         }
         ctx.lineTo(canvas!.width, canvas!.height / 2);
@@ -120,7 +122,8 @@ function WaveformVisualizer({
           const freq = 0.05;
           const amp = 20 + 10 * Math.sin(t * 0.02);
           const y = canvas!.height / 2 + amp * Math.sin(x * freq + t * 0.08);
-          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
         }
         ctx.stroke();
         t++;
@@ -433,13 +436,13 @@ export default function LiveChatPage() {
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Settings2 className="h-3.5 w-3.5" />
             Configure agents at{" "}
-            <a href="/workflow" className="underline hover:text-foreground">
+            <Link href="/workflow" className="underline hover:text-foreground">
               Voice Agents
-            </a>{" "}
+            </Link>{" "}
             and telephony at{" "}
-            <a href="/telephony-configurations" className="underline hover:text-foreground">
+            <Link href="/telephony-configurations" className="underline hover:text-foreground">
               Telephony
-            </a>
+            </Link>
           </div>
         )}
       </div>

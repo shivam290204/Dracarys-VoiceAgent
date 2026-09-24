@@ -3,6 +3,7 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
 import { getTelephonyConfigWarningsApiV1OrganizationsTelephonyConfigWarningsGet } from '@/client/sdk.gen';
+import { useAppConfig } from '@/context/AppConfigContext';
 import { useAuth } from '@/lib/auth';
 
 interface TelephonyConfigWarningsContextType {
@@ -25,6 +26,7 @@ const TelephonyConfigWarningsContext = createContext<TelephonyConfigWarningsCont
 // change. Page-level callers invalidate via refresh() after a save.
 export function TelephonyConfigWarningsProvider({ children }: { children: ReactNode }) {
     const auth = useAuth();
+    const appConfig = useAppConfig();
     const [telnyxCount, setTelnyxCount] = useState(0);
     const [vonageCount, setVonageCount] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -45,10 +47,10 @@ export function TelephonyConfigWarningsProvider({ children }: { children: ReactN
     }, []);
 
     useEffect(() => {
-        if (auth.loading || !auth.isAuthenticated || hasFetched.current) return;
+        if (auth.loading || !auth.isAuthenticated || appConfig.loading || hasFetched.current) return;
         hasFetched.current = true;
         doFetch();
-    }, [auth.loading, auth.isAuthenticated, doFetch]);
+    }, [auth.loading, auth.isAuthenticated, appConfig.loading, doFetch]);
 
     const refresh = useCallback(async () => {
         if (!auth.isAuthenticated) return;

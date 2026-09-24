@@ -47,6 +47,8 @@ interface WorkflowEditorHeaderProps {
     hasDraft: boolean;
     onPublished: () => void;
     renameWorkflow: (newName: string) => Promise<void>;
+    isAdvancedMode?: boolean;
+    onToggleAdvancedMode?: () => void;
 }
 
 export const WorkflowEditorHeader = ({
@@ -66,6 +68,8 @@ export const WorkflowEditorHeader = ({
     workflowId,
     workflowUuid,
     renameWorkflow,
+    isAdvancedMode = true,
+    onToggleAdvancedMode,
 }: WorkflowEditorHeaderProps) => {
     const router = useRouter();
     const { toggleSidebar } = useSidebar();
@@ -301,15 +305,17 @@ export const WorkflowEditorHeader = ({
 
             {/* Right section: Version + status + tester/call actions + save */}
             <div className="flex items-center gap-3">
-                {/* Read-only banner when viewing a historical version */}
-                {isViewingHistoricalVersion && (
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-blue-500/30 bg-blue-500/10">
-                        <Eye className="w-4 h-4 text-blue-400" />
-                        <span className="text-sm text-blue-400">
-                            Viewing {activeVersionLabel} - Read only
-                        </span>
-                    </div>
-                )}
+                {isAdvancedMode && (
+                    <>
+                        {/* Read-only banner when viewing a historical version */}
+                        {isViewingHistoricalVersion && (
+                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-md border border-blue-500/30 bg-blue-500/10">
+                                <Eye className="w-4 h-4 text-blue-400" />
+                                <span className="text-sm text-blue-400">
+                                    Viewing {activeVersionLabel} - Read only
+                                </span>
+                            </div>
+                        )}
 
                 {/* Back to Draft button when viewing history */}
                 {isViewingHistoricalVersion && (
@@ -408,17 +414,7 @@ export const WorkflowEditorHeader = ({
                     </Button>
                 )}
 
-                {!isViewingHistoricalVersion && (
-                    <Button
-                        variant="outline"
-                        className="flex items-center gap-2 bg-transparent border-[#3a3a3a] hover:bg-[#2a2a2a] text-white"
-                        disabled={isCallDisabled}
-                        onClick={onPhoneCallClick}
-                    >
-                        <Phone className="w-4 h-4" />
-                        Phone Call
-                    </Button>
-                )}
+
 
                 <Button
                     variant="outline"
@@ -495,10 +491,37 @@ export const WorkflowEditorHeader = ({
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
+                </>
+                )}
 
-                {/* GitHub star badge - desktop only */}
+                {!isViewingHistoricalVersion && (
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex items-center gap-2 bg-transparent border-[#3a3a3a] hover:bg-[#2a2a2a] text-white h-8"
+                        disabled={isCallDisabled}
+                        onClick={onPhoneCallClick}
+                    >
+                        <Phone className="w-4 h-4" />
+                        Phone Call
+                    </Button>
+                )}
+
+
+                {/* GitHub star badge or Advanced Builder button - desktop only */}
                 <div className="hidden md:block">
-                    <GitHubStarBadge className="border-[#3a3a3a] bg-[#2a2a2a] text-white [&_span]:bg-transparent" source="workflow_editor_header" />
+                    {onToggleAdvancedMode ? (
+                        <Button 
+                            variant="secondary" 
+                            size="sm" 
+                            className="bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white border-[#3a3a3a] h-8" 
+                            onClick={onToggleAdvancedMode}
+                        >
+                            {isAdvancedMode ? "Exit Advanced Builder" : "Advanced Builder"}
+                        </Button>
+                    ) : (
+                        <GitHubStarBadge className="border-[#3a3a3a] bg-[#2a2a2a] text-white [&_span]:bg-transparent" source="workflow_editor_header" />
+                    )}
                 </div>
             </div>
         </div>

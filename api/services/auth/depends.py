@@ -276,7 +276,8 @@ async def _handle_oss_auth(authorization: str | None) -> UserModel:
             raise HTTPException(status_code=401, detail="User not found")
     except HTTPException:
         raise
-    except Exception:
+    except Exception as e:
+        logger.error(f"JWT decode failed: {e}")
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 
     # Deliberately outside the try above: a provisioning failure must not be

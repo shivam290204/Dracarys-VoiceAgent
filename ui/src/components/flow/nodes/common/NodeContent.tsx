@@ -15,7 +15,7 @@ interface NodeContentProps {
     icon: ReactNode;
     badgeLabel?: string;
     badgeClassName?: string;
-    contentLabel?: string;
+    contentLabel?: string | null;
     hasSourceHandle?: boolean;
     hasTargetHandle?: boolean;
     children?: ReactNode;
@@ -37,7 +37,7 @@ export const NodeContent = ({
     icon,
     badgeLabel,
     badgeClassName,
-    contentLabel = "Prompt",
+    contentLabel = null,
     hasSourceHandle = false,
     hasTargetHandle = false,
     children,
@@ -88,10 +88,12 @@ export const NodeContent = ({
             </div>
 
             {/* Content area with prompt label */}
-            <div className="p-4">
-                <div className="text-xs text-muted-foreground mb-1.5 font-medium">
-                    {contentLabel}:
-                </div>
+            <div className={cn("px-4 pb-4", contentLabel ? "pt-4" : "pt-3")}>
+                {contentLabel && (
+                    <div className="text-xs text-muted-foreground mb-1.5 font-medium">
+                        {contentLabel}:
+                    </div>
+                )}
                 {children}
             </div>
 

@@ -19,10 +19,8 @@ const HIGHLIGHTS = [
 
 export function AuthShell({
   children,
-  enterpriseSlot,
 }: {
   children: ReactNode;
-  enterpriseSlot?: ReactNode;
 }) {
   return (
     <div className="grid min-h-screen w-full bg-background lg:grid-cols-[55%_45%]">
@@ -31,55 +29,48 @@ export function AuthShell({
       <main className="auth-imprint flex min-h-screen flex-col overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-6 sm:p-10">
           <div className="w-full max-w-md space-y-6 rounded-2xl border border-border/60 bg-card p-6 shadow-lg sm:p-8">
-            {/* Mobile-only wordmark (brand panel is hidden) */}
-            <div className="lg:hidden">
-              <BrandLogo className="h-7" />
-            </div>
+
             {children}
           </div>
         </div>
       </main>
 
       {/* Brand / value panel (RIGHT) — hidden on mobile */}
-      <aside className="relative hidden flex-col justify-between overflow-hidden border-l border-border/60 bg-zinc-950 p-10 lg:flex xl:p-14">
-        {/* Ambient depth: soft radial glow behind the content */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-24 top-1/3 size-[28rem] rounded-full opacity-20 blur-3xl"
-          style={{ background: "radial-gradient(circle, var(--cta), transparent 70%)" }}
-        />
+      <aside className="relative hidden flex-col justify-center overflow-hidden bg-black lg:flex items-center">
+        {/* Full bleed background image */}
+        <div className="absolute inset-0">
+          <img 
+            src="/dragon_photo.png" 
+            alt="Majestic Dragon" 
+            className="w-full h-full object-cover object-center opacity-100 transition-transform duration-[30000ms] hover:scale-110 ease-out"
+          />
+          {/* Vignette effect fading to black at the edges */}
+          <div className="absolute inset-0 bg-black/20 shadow-[inset_0_0_150px_rgba(0,0,0,1)]" />
+          
+          {/* Gradient fading to pitch black at the very bottom for the text to sit on */}
+          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/80 to-transparent" />
+          
+          {/* Subtle side fade to blend with the form on the left */}
+          <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background to-transparent" />
 
-        <div className="relative">
-          <BrandLogo inverse className="h-8" />
+          {/* Fiery radial glow anchored near the bottom to match the fire breath */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_80%,rgba(220,38,38,0.2)_0%,transparent_60%)] mix-blend-color-dodge pointer-events-none" />
         </div>
 
-        <div className="relative max-w-md space-y-5">
-          <h1 className="text-3xl font-semibold leading-tight tracking-tight text-zinc-50 xl:text-4xl">
-            The open-source voice AI platform.
+        {/* Content overlaid on the dragon - anchored to the bottom */}
+        <div className="relative z-10 flex flex-col items-center justify-end w-full h-full pb-20 px-4 sm:px-10 pointer-events-none overflow-hidden">
+          <h1 
+            className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-orange-200 via-red-500 to-red-900 uppercase text-center w-full max-w-full drop-shadow-2xl" 
+            style={{ 
+              fontFamily: "'Cinzel', serif",
+              filter: "drop-shadow(0 0 30px rgba(220,38,38,0.9)) drop-shadow(0 10px 10px rgba(0,0,0,0.9))"
+            }}
+          >
+            Dracarys
           </h1>
-          <ul className="flex flex-wrap gap-2">
-            {HIGHLIGHTS.map((point) => (
-              <li
-                key={point}
-                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-medium text-zinc-300"
-              >
-                {point}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Enterprise CTA block (Bland-style) — bottom margin lifts it off the
-            viewport edge while justify-between keeps the column layout */}
-        <div className="relative mb-12 max-w-md space-y-3 rounded-xl border border-white/10 bg-white/[0.03] p-5 xl:mb-16">
-          <h2 className="text-sm font-semibold text-zinc-100">
-            Need on-prem, data residency &amp; a data perimeter?
-          </h2>
-          <p className="text-sm text-zinc-400">
-            We deploy Dograh inside your environment for regulated and
-            high-scale teams.
+          <p className="mt-4 sm:mt-6 text-sm sm:text-lg xl:text-xl tracking-[0.3em] text-red-500 uppercase font-bold text-center" style={{ filter: "drop-shadow(0 0 15px rgba(220,38,38,0.8))" }}>
+            Fire and Blood
           </p>
-          {enterpriseSlot}
         </div>
       </aside>
     </div>

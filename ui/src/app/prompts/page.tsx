@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   BookOpen,
   ChevronRight,
@@ -16,6 +15,8 @@ import {
   Trash2,
   Users,
 } from "lucide-react";
+import Link from "next/link";
+import React from "react";
 import { useCallback, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -490,12 +491,12 @@ export default function PromptsPage() {
                 <p className="mt-1 text-xs text-muted-foreground">
                   Go to Voice Agents, select an agent, and paste this prompt as the system prompt in the configuration.
                 </p>
-                <a
+                <Link
                   href="/workflow"
                   className="mt-3 inline-flex items-center gap-1.5 text-xs text-cta hover:underline"
                 >
                   Open Voice Agents <ChevronRight className="h-3 w-3" />
-                </a>
+                </Link>
               </div>
             </div>
           ) : (

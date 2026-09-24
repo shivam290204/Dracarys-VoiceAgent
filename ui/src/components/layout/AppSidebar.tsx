@@ -87,21 +87,7 @@ const NAV_SECTIONS: SidebarNavSection[] = [
       },
     ],
   },
-  {
-    label: "INTERACT",
-    items: [
-      {
-        title: "Live Chat",
-        url: "/live-chat",
-        icon: Mic,
-      },
-      {
-        title: "AI Chat",
-        url: "/chat",
-        icon: MessageSquare,
-      },
-    ],
-  },
+
   {
     label: "BUILD",
     items: [
@@ -115,11 +101,13 @@ const NAV_SECTIONS: SidebarNavSection[] = [
         url: "/campaigns",
         icon: Megaphone,
       },
+      /*
       {
         title: "Models",
         url: "/model-configurations",
         icon: Brain,
       },
+      */
       {
         title: "Telephony",
         url: "/telephony-configurations",
@@ -128,30 +116,10 @@ const NAV_SECTIONS: SidebarNavSection[] = [
         showsTelephonyWarning: true,
       },
       {
-        title: "Tools",
-        url: "/tools",
-        icon: Wrench,
-      },
-      {
-        title: "Files",
-        url: "/files",
-        icon: Database,
-      },
-      {
         title: "Recordings",
         url: "/recordings",
         icon: AudioLines,
-      },
-      {
-        title: "Prompts",
-        url: "/prompts",
-        icon: Library,
-      },
-      {
-        title: "Developers",
-        url: "/api-keys",
-        icon: Key,
-      },
+      }
     ],
   },
   {
@@ -163,19 +131,9 @@ const NAV_SECTIONS: SidebarNavSection[] = [
         icon: TrendingUp,
       },
       {
-        title: "Analytics",
-        url: "/analytics",
-        icon: BarChart2,
-      },
-      {
         title: "Billing",
         url: "/billing",
         icon: CircleDollarSign,
-      },
-      {
-        title: "Reports",
-        url: "/reports",
-        icon: FileText,
       }
     ],
   },

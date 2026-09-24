@@ -23,7 +23,7 @@ import logger from '@/lib/logger';
 
 export default function CreateWorkflowPage() {
     const router = useRouter();
-    const { user, getAccessToken } = useAuth();
+    const { user } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -48,7 +48,6 @@ export default function CreateWorkflowPage() {
         setError(null);
 
         try {
-            const accessToken = await getAccessToken();
 
             // Call the API to create workflow from template
             const response = await createWorkflowFromTemplateApiV1WorkflowCreateTemplatePost({
@@ -57,17 +56,18 @@ export default function CreateWorkflowPage() {
                     use_case: useCase,
                     activity_description: activityDescription,
                 },
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                },
             });
+
+            if (response.error) {
+                throw new Error((response.error as { detail?: string })?.detail || 'Failed to create workflow');
+            }
 
             if (response.data?.id) {
                 setWorkflowId(String(response.data.id));
                 setShowSuccessModal(true);
             }
-        } catch (err) {
-            setError('Failed to create workflow. Please try again.');
+        } catch (err: any) {
+            setError(err.message || 'Failed to create workflow. Please try again.');
             logger.error(`Error creating workflow: ${err}`);
         } finally {
             setIsLoading(false);

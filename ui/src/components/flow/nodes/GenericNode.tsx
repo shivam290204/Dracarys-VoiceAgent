@@ -192,6 +192,7 @@ function CanvasPreview({
     triggerCopied: boolean;
     onStaleTools: (uuids: string[]) => void;
     onStaleDocuments: (uuids: string[]) => void;
+    onOpenDialog: () => void;
 }) {
     const { config: appConfig } = useAppConfig();
     if (spec.name === "trigger") {
@@ -286,11 +287,27 @@ function CanvasPreview({
     // Default: prompt preview + tool/document badges (when spec declares them).
     const hasToolRefs = spec.properties.some((p) => p.type === "tool_refs");
     const hasDocRefs = spec.properties.some((p) => p.type === "document_refs");
+    const hasPrompt = spec.properties.some((p) => p.name === "prompt");
+
     return (
         <>
-            <p className="text-sm text-muted-foreground line-clamp-5 leading-relaxed">
-                {data.prompt || "No prompt configured"}
-            </p>
+            {hasPrompt && (
+                <div className="flex items-center gap-2">
+                    <Button 
+                        variant="secondary" 
+                        size="sm" 
+                        className="w-full text-xs font-medium" 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onOpenDialog();
+                        }}
+                    >
+                        <LucideIcons.Edit2 className="h-3 w-3 mr-1.5" />
+                        {data.prompt ? "Edit Prompt" : "Add Prompt"}
+                    </Button>
+                </div>
+            )}
+            
             {hasToolRefs && data.tool_uuids && data.tool_uuids.length > 0 && (
                 <div className="mt-3 pt-3 border-t border-border/50">
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
@@ -618,7 +635,7 @@ export const GenericNode = memo(({ data, selected, id, type }: GenericNodeProps)
     const Icon = spec ? resolveIcon(spec.icon) : Circle;
     const docUrl = spec?.docs_url ?? DOC_URL_BY_SPEC[type];
     const contentLabel = spec?.properties.some((p) => p.name === "prompt")
-        ? "Prompt"
+        ? null
         : "Details";
 
     // Edit dialog title: "Edit {display_name}". Webhook keeps the original
@@ -652,6 +669,7 @@ export const GenericNode = memo(({ data, selected, id, type }: GenericNodeProps)
                         triggerCopied={triggerCopied}
                         onStaleTools={handleStaleTools}
                         onStaleDocuments={handleStaleDocuments}
+                        onOpenDialog={() => setOpen(true)}
                     />
                 )}
             </NodeContent>

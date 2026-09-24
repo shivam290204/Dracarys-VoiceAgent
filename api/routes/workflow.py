@@ -635,10 +635,15 @@ async def create_workflow_from_template(
     except HTTPException:
         raise
     except HTTPStatusError as e:
-        logger.error(f"MPS API error: {e}")
+        try:
+            detail = e.response.json().get("detail", str(e))
+        except Exception:
+            detail = e.response.text if hasattr(e, "response") else str(e)
+            
+        logger.error(f"MPS API error: {detail}")
         raise HTTPException(
             status_code=e.response.status_code if hasattr(e, "response") else 500,
-            detail=str(e),
+            detail=detail,
         )
     except Exception as e:
         logger.error(f"Unexpected error creating workflow from template: {e}")

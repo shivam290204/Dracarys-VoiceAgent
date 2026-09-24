@@ -66,10 +66,24 @@ export function setupAuthInterceptor(apiClient: Client, getAccessToken: () => Pr
         }
         try {
             const token = await getAccessToken();
-            request.headers.set('Authorization', `Bearer ${token}`);
+            if (token) {
+                request.headers.set('Authorization', `Bearer ${token}`);
+            }
         } catch {
             // If token retrieval fails, let the request proceed without auth
         }
         return request;
+    });
+
+    apiClient.interceptors.response.use(async (response) => {
+        if (response.status === 401) {
+            // If the backend rejects the token (e.g. expired), redirect to login
+            if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/auth/')) {
+                // We clear the cookie by navigating to the auth login page
+                // The user's token is invalid so they need to re-authenticate
+                window.location.href = '/auth/login';
+            }
+        }
+        return response;
     });
 }

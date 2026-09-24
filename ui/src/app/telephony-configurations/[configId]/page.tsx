@@ -6,8 +6,8 @@ import {
   Copy,
   ExternalLink,
   Pencil,
-  Plus,
   PhoneCall,
+  Plus,
   RotateCcw,
   Star,
   Trash2,
@@ -54,7 +54,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -63,6 +62,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppConfig } from "@/context/AppConfigContext";
 import { useOrgConfig } from "@/context/OrgConfigContext";
 import { useOrganizationTimezone } from "@/hooks/useOrganizationTimezone";
@@ -85,7 +85,7 @@ export default function TelephonyConfigurationDetailPage() {
   const organizationTimezone = useOrganizationTimezone();
   const inboundWebhookUrl = `${resolveWebhookBaseUrl(appConfig?.tunnelUrl)}${INBOUND_WEBHOOK_PATH}`;
   const [config, setConfig] = useState<TelephonyConfigurationDetail | null>(null);
-  // ARI only: Dograh generates the Stasis application name, so the dialplan
+  // ARI only: Dracarys generates the Stasis application name, so the dialplan
   // line cannot be written until the configuration has been saved.
   const stasisAppName =
     typeof config?.credentials?.stasis_app_name === "string"
@@ -323,7 +323,7 @@ export default function TelephonyConfigurationDetailPage() {
                     This configuration is disabled
                   </p>
                   <p className="text-muted-foreground">
-                    Dograh stopped reconnecting after repeated connection
+                    Dracarys stopped reconnecting after repeated connection
                     failures
                     {config.inactive_reason ? `: ${config.inactive_reason}` : ""}.
                     Calls will not work until it is reconnected. Correct the
@@ -358,7 +358,7 @@ export default function TelephonyConfigurationDetailPage() {
               <p className="text-xs text-muted-foreground">
                 Add this line to your Asterisk <code>extensions.conf</code>, then run{" "}
                 <code>dialplan reload</code>. Until you do, calls reach Asterisk but never
-                arrive at Dograh.
+                arrive at Dracarys.
               </p>
               <button
                 type="button"

@@ -7,6 +7,7 @@ import {
     updateUserOnboardingStateApiV1UserOnboardingStatePut,
 } from '@/client/sdk.gen';
 import type { OnboardingStateUpdate } from '@/client/types.gen';
+import { useAppConfig } from '@/context/AppConfigContext';
 import { useAuth } from '@/lib/auth';
 
 export type TooltipKey = 'web_call' | 'customize_workflow';
@@ -65,12 +66,13 @@ export const OnboardingProvider = ({ children }: { children: React.ReactNode }) 
     const [loaded, setLoaded] = useState(false);
 
     const auth = useAuth();
+    const appConfig = useAppConfig();
     const authRef = useRef(auth);
     authRef.current = auth;
     const hasFetched = useRef(false);
 
     useEffect(() => {
-        if (auth.loading || hasFetched.current) return;
+        if (auth.loading || appConfig.loading || hasFetched.current) return;
         if (!auth.isAuthenticated) {
             // Unauthenticated pages (login/signup) have no onboarding state;
             // unblock consumers with defaults.
@@ -91,7 +93,7 @@ export const OnboardingProvider = ({ children }: { children: React.ReactNode }) 
                 console.error('[onboarding] failed to fetch onboarding state', res?.error);
             }
         })();
-    }, [auth.loading, auth.isAuthenticated]);
+    }, [auth.loading, auth.isAuthenticated, appConfig.loading]);
 
     // Best-effort server write. Only the delta is sent; the server unions list
     // fields into the stored state, so concurrent tabs don't drop each other's

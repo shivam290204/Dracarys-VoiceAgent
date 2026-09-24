@@ -1872,7 +1872,7 @@ export type CurrentUsageResponse = {
      */
     period_end: string;
     /**
-     * Used Dograh Tokens
+     * Used Dracarys Tokens
      */
     used_dograh_tokens: number;
     /**
@@ -1946,7 +1946,7 @@ export type DailyUsageBreakdownResponse = {
      */
     total_cost_usd?: number | null;
     /**
-     * Total Dograh Tokens
+     * Total Dracarys Tokens
      */
     total_dograh_tokens: number;
     /**
@@ -1972,7 +1972,7 @@ export type DailyUsageItem = {
      */
     cost_usd?: number | null;
     /**
-     * Dograh Tokens
+     * Dracarys Tokens
      */
     dograh_tokens: number;
     /**
@@ -2325,7 +2325,7 @@ export type DocumentUploadResponseSchema = {
 };
 
 /**
- * Dograh
+ * Dracarys
  */
 export type DograhEmbeddingsConfiguration = {
     /**
@@ -2339,13 +2339,13 @@ export type DograhEmbeddingsConfiguration = {
     /**
      * Model
      *
-     * Dograh-managed embedding model.
+     * Dracarys-managed embedding model.
      */
     model?: string;
 };
 
 /**
- * Dograh
+ * Dracarys
  */
 export type DograhLlmService = {
     /**
@@ -2359,7 +2359,7 @@ export type DograhLlmService = {
     /**
      * Model
      *
-     * Dograh-hosted model tier.
+     * Dracarys-hosted model tier.
      */
     model?: string;
 };
@@ -2387,7 +2387,7 @@ export type DograhManagedAiModelConfiguration = {
 };
 
 /**
- * Dograh
+ * Dracarys
  */
 export type DograhSttService = {
     /**
@@ -2401,7 +2401,7 @@ export type DograhSttService = {
     /**
      * Model
      *
-     * Dograh STT tier.
+     * Dracarys STT tier.
      */
     model?: string;
     /**
@@ -2413,7 +2413,7 @@ export type DograhSttService = {
 };
 
 /**
- * Dograh
+ * Dracarys
  */
 export type DograhTtsService = {
     /**
@@ -2427,7 +2427,7 @@ export type DograhTtsService = {
     /**
      * Model
      *
-     * Dograh TTS tier.
+     * Dracarys TTS tier.
      */
     model?: string;
     /**
@@ -2972,7 +2972,7 @@ export type GoogleTtsConfiguration = {
     /**
      * Model
      *
-     * Google Cloud low-latency TTS engine. Dograh maps this to Pipecat's streaming Google TTS service for Chirp 3 HD and Journey voices.
+     * Google Cloud low-latency TTS engine. Dracarys maps this to Pipecat's streaming Google TTS service for Chirp 3 HD and Journey voices.
      */
     model?: string;
     /**
@@ -3278,7 +3278,7 @@ export type HttpApiConfig = {
     /**
      * Preset Parameters
      *
-     * Parameters injected by Dograh from fixed values or workflow context templates.
+     * Parameters injected by Dracarys from fixed values or workflow context templates.
      */
     preset_parameters?: Array<PresetToolParameter> | null;
     /**
@@ -3380,7 +3380,7 @@ export type HttpTransferResolverConfig = {
     /**
      * Wait Message
      *
-     * Optional short message played while Dograh resolves routing.
+     * Optional short message played while Dracarys resolves routing.
      */
     wait_message?: string | null;
     /**
@@ -3392,7 +3392,7 @@ export type HttpTransferResolverConfig = {
     /**
      * Preset Parameters
      *
-     * Parameters injected by Dograh from fixed values or workflow context templates.
+     * Parameters injected by Dracarys from fixed values or workflow context templates.
      */
     preset_parameters?: Array<PresetToolParameter> | null;
 };
@@ -4603,7 +4603,7 @@ export type OrganizationPreferences = {
     /**
      * Disposition Mapping
      *
-     * Dograh disposition -> the code this organization uses for it. Applied when writing `gathered_context.mapped_call_disposition`, so webhooks, run filters, reports and external-PBX write-backs all read the organization's own vocabulary. Dispositions absent from the mapping pass through unchanged.
+     * Dracarys disposition -> the code this organization uses for it. Applied when writing `gathered_context.mapped_call_disposition`, so webhooks, run filters, reports and external-PBX write-backs all read the organization's own vocabulary. Dispositions absent from the mapping pass through unchanged.
      */
     disposition_mapping?: {
         [key: string]: string;
@@ -4811,7 +4811,7 @@ export type PlivoConfigurationRequest = {
 /**
  * PresetToolParameter
  *
- * A parameter injected by Dograh at runtime.
+ * A parameter injected by Dracarys at runtime.
  */
 export type PresetToolParameter = {
     /**
@@ -6789,13 +6789,13 @@ export type ToolTestResponse = {
  * Everything about how a handoff sounds is fixed: the caller hears a ringer
  * while the next agent is prepared, and that agent opens with its own
  * configured greeting. Only the handover line is configurable, because it is
- * caller-facing and Dograh runs in more than one language.
+ * caller-facing and Dracarys runs in more than one language.
  */
 export type TransferAgentConfig = {
     /**
      * Workflow Id
      *
-     * Id of the Dograh agent to transfer to. Must be in the same organization, and must not be a speech-to-speech agent.
+     * Id of the Dracarys agent to transfer to. Must be in the same organization, and must not be a speech-to-speech agent.
      */
     workflow_id: number;
     /**
@@ -6875,7 +6875,7 @@ export type TransferCallConfig = {
     /**
      * Call Disposition
      *
-     * Optional disposition to record after a successful transfer. When omitted, Dograh records its provider-specific transfer default.
+     * Optional disposition to record after a successful transfer. When omitted, Dracarys records its provider-specific transfer default.
      */
     call_disposition?: string | null;
     /**
@@ -7001,7 +7001,7 @@ export type TrunkListResponse = {
  *
  * ``settings`` is the provider's own trunk schema (validated on write against
  * ``ProviderSpec.trunk_settings_cls``). The provider-side identifier is
- * Dograh's bookkeeping and is not exposed.
+ * Dracarys's bookkeeping and is not exposed.
  */
 export type TrunkResponse = {
     /**
@@ -7272,7 +7272,7 @@ export type UsageHistoryResponse = {
      */
     runs: Array<WorkflowRunUsageResponse>;
     /**
-     * Total Dograh Tokens
+     * Total Dracarys Tokens
      */
     total_dograh_tokens: number;
     /**
@@ -8201,7 +8201,7 @@ export type WorkflowRunUsageResponse = {
      */
     created_at: string;
     /**
-     * Dograh Token Usage
+     * Dracarys Token Usage
      */
     dograh_token_usage: number;
     /**

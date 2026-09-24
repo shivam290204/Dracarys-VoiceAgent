@@ -12,7 +12,6 @@ import {
 import type { RecordingResponseSchema } from "@/client/types.gen";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
     Sheet,
     SheetContent,
@@ -20,6 +19,7 @@ import {
     SheetHeader,
     SheetTitle,
 } from "@/components/ui/sheet";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAudioPlayback } from "@/hooks/useAudioPlayback";
 import { useOrganizationTimezone } from "@/hooks/useOrganizationTimezone";
 import { formatDateTime } from "@/lib/dateTime";
@@ -337,8 +337,8 @@ export default function RecordingsList({ refreshKey }: { refreshKey?: number }) 
                                             </Button>
                                             <div className="flex-1 flex items-center gap-0.5 h-6">
                                                 {Array.from({ length: 40 }).map((_, i) => (
-                                                    <div 
-                                                        key={i} 
+                                                    <div
+                                                        key={i}
                                                         className={`w-1 rounded-full transition-all duration-300 ${playingId === rec.recording_id ? "bg-primary animate-pulse" : "bg-muted-foreground/30"}`}
                                                         style={{ height: `${20 + Math.random() * 80}%`, animationDelay: `${i * 0.05}s` }}
                                                     />

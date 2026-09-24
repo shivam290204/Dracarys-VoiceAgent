@@ -1,16 +1,11 @@
 "use client";
 
+import { Activity, Bot,PhoneCall, Users } from 'lucide-react';
 import Link from 'next/link';
-import { Activity, Users, PhoneCall, Bot } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useAuth } from '@/lib/auth';
-
 export default function OverviewPage() {
-    const { user, provider } = useAuth();
-    const isOSSMode = provider !== 'stack';
-
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="max-w-5xl mx-auto">

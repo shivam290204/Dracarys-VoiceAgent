@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   Activity,
   BarChart2,
@@ -13,6 +12,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import React from "react";
 import {
   Bar,
   BarChart,

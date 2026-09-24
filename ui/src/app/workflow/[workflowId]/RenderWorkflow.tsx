@@ -27,6 +27,7 @@ import AddNodePanel from "../../../components/flow/AddNodePanel";
 import CustomEdge from "../../../components/flow/edges/CustomEdge";
 import { GenericNode } from "../../../components/flow/nodes/GenericNode";
 import { PhoneCallDialog } from './components/PhoneCallDialog';
+import { SimpleWorkflowView } from './components/SimpleWorkflowView';
 import { VersionHistoryPanel } from './components/VersionHistoryPanel';
 import type { WorkflowRuntimeNodeTransition } from './components/workflow-tester/types';
 import { WorkflowEditorHeader } from "./components/WorkflowEditorHeader";
@@ -104,6 +105,7 @@ function RenderWorkflow({
     const [tools, setTools] = useState<ToolResponse[] | undefined>(undefined);
     const [recordings, setRecordings] = useState<RecordingResponseSchema[]>([]);
     const [activeRuntimeNodeId, setActiveRuntimeNodeId] = useState<string | null>(null);
+    const [isAdvancedMode, setIsAdvancedMode] = useState(false);
 
     const {
         rfInstance,
@@ -591,13 +593,31 @@ function RenderWorkflow({
                     hasDraft={hasDraft}
                     onPublished={handlePublished}
                     renameWorkflow={renameWorkflow}
+                    isAdvancedMode={isAdvancedMode}
+                    onToggleAdvancedMode={() => setIsAdvancedMode(!isAdvancedMode)}
                 />
 
                 {/* Workflow Canvas */}
                 <div className="flex-1 min-h-0">
                     <div className="flex h-full min-w-0">
                         <div className="relative min-w-0 flex-1">
-                            <ReactFlow
+                            {!isAdvancedMode ? (
+                                <div className="flex flex-col items-center justify-center w-full h-full bg-zinc-50 dark:bg-zinc-950 p-6 overflow-y-auto">
+                                    <div className="w-full max-w-xl h-full min-h-[600px] border border-border rounded-2xl shadow-xl bg-background overflow-hidden flex flex-col relative">
+                                        <WorkflowTesterPanel
+                                            workflowId={workflowId}
+                                            initialContextVariables={templateContextVariables}
+                                            disabled={testerDisabledReason !== null}
+                                            disabledReason={testerDisabledReason}
+                                            showWebCallOnboarding={shouldShowWebCallOnboarding}
+                                            isVisible={true}
+                                            onRuntimeNodeTransition={handleRuntimeNodeTransition}
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    <ReactFlow
                                 key={activeVersionId ?? 'current'}
                                 nodes={displayNodes}
                                 edges={edges}
@@ -745,9 +765,11 @@ function RenderWorkflow({
                                     )}
                                 </TooltipProvider>
                             </div>
+                            </>
+                            )}
                         </div>
 
-                        {isTesterRailOpen && (
+                        {isAdvancedMode && isTesterRailOpen && (
                             <aside className="hidden h-full w-[400px] shrink-0 border-l border-border xl:block">
                                 <WorkflowTesterPanel
                                     workflowId={workflowId}
@@ -763,19 +785,21 @@ function RenderWorkflow({
                         )}
                     </div>
 
-                    <Sheet open={isTesterSheetOpen} onOpenChange={setIsTesterSheetOpen}>
-                        <SheetContent side="right" className="w-full max-w-none p-0 sm:max-w-xl xl:hidden">
-                            <WorkflowTesterPanel
-                                workflowId={workflowId}
-                                initialContextVariables={templateContextVariables}
-                                disabled={testerDisabledReason !== null}
-                                disabledReason={testerDisabledReason}
-                                showWebCallOnboarding={shouldShowWebCallOnboarding}
-                                isVisible={isTesterSheetOpen}
-                                onRuntimeNodeTransition={handleRuntimeNodeTransition}
-                            />
-                        </SheetContent>
-                    </Sheet>
+                    {isAdvancedMode && (
+                        <Sheet open={isTesterSheetOpen} onOpenChange={setIsTesterSheetOpen}>
+                            <SheetContent side="right" className="w-full max-w-none p-0 sm:max-w-xl xl:hidden">
+                                <WorkflowTesterPanel
+                                    workflowId={workflowId}
+                                    initialContextVariables={templateContextVariables}
+                                    disabled={testerDisabledReason !== null}
+                                    disabledReason={testerDisabledReason}
+                                    showWebCallOnboarding={shouldShowWebCallOnboarding}
+                                    isVisible={isTesterSheetOpen}
+                                    onRuntimeNodeTransition={handleRuntimeNodeTransition}
+                                />
+                            </SheetContent>
+                        </Sheet>
+                    )}
                 </div>
 
                 <AddNodePanel

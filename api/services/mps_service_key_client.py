@@ -968,28 +968,28 @@ class MPSServiceKeyClient:
         Raises:
             HTTPException: If the API call fails
         """
-        async with httpx.AsyncClient(timeout=httpx.Timeout(30.0)) as client:
-            response = await client.post(
-                f"{self.base_url}/api/v1/workflow/create-workflow",
-                json={
-                    "call_type": call_type,
-                    "use_case": use_case,
-                    "activity_description": activity_description,
-                },
-                headers=self._get_headers(organization_id, created_by),
-            )
+        try:
+            async with httpx.AsyncClient(timeout=httpx.Timeout(30.0)) as client:
+                response = await client.post(
+                    f"{self.base_url}/api/v1/workflow/create-workflow",
+                    json={
+                        "call_type": call_type,
+                        "use_case": use_case,
+                        "activity_description": activity_description,
+                    },
+                    headers=self._get_headers(organization_id, created_by),
+                )
 
-            if response.status_code == 200:
+                response.raise_for_status()
                 return response.json()
-            else:
-                logger.error(
-                    f"Failed to create workflow: {response.status_code} - {response.text}"
-                )
-                raise httpx.HTTPStatusError(
-                    f"Failed to create workflow: {response.text}",
-                    request=response.request,
-                    response=response,
-                )
+        except httpx.HTTPStatusError as e:
+            logger.error(
+                f"Failed to create workflow: {e.response.status_code} - {e.response.text}"
+            )
+            raise e
+        except httpx.RequestError as e:
+            logger.error(f"MPS API request error: {e}")
+            raise MPSUnavailableError("call_workflow_api") from e
 
 
 # Create a singleton instance

@@ -9,6 +9,7 @@ import {
   Trash2,
   User,
 } from "lucide-react";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { getWorkflowsApiV1WorkflowFetchGet } from "@/client/sdk.gen";
@@ -319,15 +320,15 @@ export default function AIChatPage() {
               <div>
                 <h2 className="text-lg font-semibold">Start a Conversation</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Select an agent from the sidebar and click "New Conversation"
+                  Select an agent from the sidebar and click &quot;New Conversation&quot;
                 </p>
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Settings2 className="h-3.5 w-3.5" />
                 Build agents at{" "}
-                <a href="/workflow" className="underline hover:text-foreground">
+                <Link href="/workflow" className="underline hover:text-foreground">
                   Voice Agents
-                </a>
+                </Link>
               </div>
             </div>
           ) : (
