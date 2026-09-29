@@ -1,8 +1,11 @@
 "use client";
 
-import { Bot, ExternalLink, Flame, Mic, Phone, PhoneCall, PhoneOff, Workflow } from 'lucide-react';
+import { Bot, ExternalLink, Flame, Loader2, Mic, Phone, PhoneCall, PhoneOff, Workflow } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { toast } from 'sonner';
+
+import { getWorkflowsApiV1WorkflowFetchGet, initiateCallApiV1TelephonyInitiateCallPost } from '@/client/sdk.gen';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,10 +23,40 @@ export default function OverviewPage() {
     const [showCallDialog, setShowCallDialog] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isCallInitiated, setIsCallInitiated] = useState(false);
+    const [isCalling, setIsCalling] = useState(false);
 
-    const handleInitiateCall = () => {
+    const handleInitiateCall = async () => {
         if (!phoneNumber.trim()) return;
-        setIsCallInitiated(true);
+        setIsCalling(true);
+        try {
+            // Fetch workflows to find an active agent to place the call
+            const response = await getWorkflowsApiV1WorkflowFetchGet({
+                query: { status: 'active' }
+            });
+            const workflows = Array.isArray(response.data) ? response.data : (response.data ? [response.data] : []);
+            if (workflows.length === 0) {
+                toast.error("You need to build a Voice Agent first!");
+                setIsCalling(false);
+                return;
+            }
+            
+            // Just use the first active workflow for the demo call
+            const workflowId = workflows[0].id;
+            
+            await initiateCallApiV1TelephonyInitiateCallPost({
+                body: {
+                    workflow_id: workflowId,
+                    phone_number: phoneNumber,
+                }
+            });
+            
+            setIsCallInitiated(true);
+        } catch (err: any) {
+            console.error("Call initiation error", err);
+            toast.error(err?.response?.data?.detail || "Failed to initiate call. Check if you have a valid telephony configuration.");
+        } finally {
+            setIsCalling(false);
+        }
     };
 
     const handleCloseDialog = () => {
@@ -224,9 +257,19 @@ export default function OverviewPage() {
                                         id="confirm-call-btn"
                                         className="bg-orange-500 hover:bg-orange-600 gap-2"
                                         onClick={handleInitiateCall}
+                                        disabled={isCalling}
                                     >
-                                        <Phone className="h-4 w-4" />
-                                        Confirm Call
+                                        {isCalling ? (
+                                            <>
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                Initiating...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Phone className="h-4 w-4" />
+                                                Confirm Call
+                                            </>
+                                        )}
                                     </Button>
                                 </div>
                             </div>
