@@ -185,6 +185,7 @@ function CanvasPreview({
     triggerCopied,
     onStaleTools,
     onStaleDocuments,
+    onOpenDialog,
 }: {
     spec: NodeSpec;
     data: FlowNodeData;
@@ -293,10 +294,10 @@ function CanvasPreview({
         <>
             {hasPrompt && (
                 <div className="flex items-center gap-2">
-                    <Button 
-                        variant="secondary" 
-                        size="sm" 
-                        className="w-full text-xs font-medium" 
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        className="w-full text-xs font-medium"
                         onClick={(e) => {
                             e.stopPropagation();
                             onOpenDialog();
@@ -307,7 +308,7 @@ function CanvasPreview({
                     </Button>
                 </div>
             )}
-            
+
             {hasToolRefs && data.tool_uuids && data.tool_uuids.length > 0 && (
                 <div className="mt-3 pt-3 border-t border-border/50">
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">

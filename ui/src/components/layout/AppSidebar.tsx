@@ -112,7 +112,6 @@ const NAV_SECTIONS: SidebarNavSection[] = [
         title: "Telephony",
         url: "/telephony-configurations",
         icon: Phone,
-        badge: 3, // Mock live calls count
         showsTelephonyWarning: true,
       },
       {

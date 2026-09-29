@@ -414,8 +414,6 @@ export const WorkflowEditorHeader = ({
                     </Button>
                 )}
 
-
-
                 <Button
                     variant="outline"
                     className="flex items-center gap-2 bg-transparent border-[#3a3a3a] hover:bg-[#2a2a2a] text-white"
@@ -511,12 +509,12 @@ export const WorkflowEditorHeader = ({
                 {/* GitHub star badge or Advanced Builder button - desktop only */}
                 <div className="hidden md:block">
                     {onToggleAdvancedMode ? (
-                        <Button 
-                            variant="secondary" 
-                            size="sm" 
-                            className="bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white border-[#3a3a3a] h-8" 
-                            onClick={onToggleAdvancedMode}
-                        >
+                        <Button
+                        variant="secondary"
+                        size="sm"
+                        className="bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white border-[#3a3a3a] h-8"
+                        onClick={onToggleAdvancedMode}
+                    >
                             {isAdvancedMode ? "Exit Advanced Builder" : "Advanced Builder"}
                         </Button>
                     ) : (

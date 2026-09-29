@@ -1,6 +1,5 @@
 import { StackHandler, StackTheme } from "@stackframe/stack";
 
-import { AuthEnterpriseCTA } from "@/components/auth/AuthEnterpriseCTA";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { getAuthProvider } from "@/lib/auth/config";
 
