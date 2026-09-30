@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { getWorkflowsApiV1WorkflowFetchGet, initiateCallApiV1TelephonyInitiateCallPost } from '@/client/sdk.gen';
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -39,21 +38,21 @@ export default function OverviewPage() {
                 setIsCalling(false);
                 return;
             }
-            
+
             // Just use the first active workflow for the demo call
             const workflowId = workflows[0].id;
-            
+
             await initiateCallApiV1TelephonyInitiateCallPost({
                 body: {
                     workflow_id: workflowId,
                     phone_number: phoneNumber,
                 }
             });
-            
+
             setIsCallInitiated(true);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Call initiation error", err);
-            toast.error(err?.response?.data?.detail || "Failed to initiate call. Check if you have a valid telephony configuration.");
+            toast.error((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Failed to initiate call. Check if you have a valid telephony configuration.");
         } finally {
             setIsCalling(false);
         }
