@@ -27,6 +27,7 @@ import AddNodePanel from "../../../components/flow/AddNodePanel";
 import CustomEdge from "../../../components/flow/edges/CustomEdge";
 import { GenericNode } from "../../../components/flow/nodes/GenericNode";
 import { PhoneCallDialog } from './components/PhoneCallDialog';
+import { SimpleWorkflowView } from './components/SimpleWorkflowView';
 import { VersionHistoryPanel } from './components/VersionHistoryPanel';
 import type { WorkflowRuntimeNodeTransition } from './components/workflow-tester/types';
 import { WorkflowEditorHeader } from "./components/WorkflowEditorHeader";
@@ -601,8 +602,17 @@ function RenderWorkflow({
                     <div className="flex h-full min-w-0">
                         <div className="relative min-w-0 flex-1">
                             {!isAdvancedMode ? (
-                                <div className="flex flex-col items-center justify-center w-full h-full bg-zinc-50 dark:bg-zinc-950 p-6 overflow-y-auto">
-                                    <div className="w-full max-w-xl h-full min-h-[600px] border border-border rounded-2xl shadow-xl bg-background overflow-hidden flex flex-col relative">
+                                <SimpleWorkflowView
+                                    workflowName={workflowName}
+                                    nodes={nodes}
+                                    setNodes={setNodes}
+                                    setIsDirty={setIsDirty}
+                                    saveWorkflow={guardedSaveWorkflow}
+                                    renameWorkflow={renameWorkflow}
+                                    workflowConfigurations={workflowConfigurations ?? undefined}
+                                    saveWorkflowConfigurations={saveWorkflowConfigurations}
+                                    onGoToAdvanced={() => setIsAdvancedMode(true)}
+                                    testerPanel={
                                         <WorkflowTesterPanel
                                             workflowId={workflowId}
                                             initialContextVariables={templateContextVariables}
@@ -612,8 +622,8 @@ function RenderWorkflow({
                                             isVisible={true}
                                             onRuntimeNodeTransition={handleRuntimeNodeTransition}
                                         />
-                                    </div>
-                                </div>
+                                    }
+                                />
                             ) : (
                                 <>
                                     <ReactFlow
