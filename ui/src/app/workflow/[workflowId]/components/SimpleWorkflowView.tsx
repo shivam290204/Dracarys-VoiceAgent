@@ -64,7 +64,7 @@ export function SimpleWorkflowView({
                 }
             }
         }
-        const voice = workflowConfigurations?.model_overrides?.tts?.voice || 'alloy';
+        const voice = workflowConfigurations?.model_overrides?.tts?.voice || 'default';
         setLocalVoice(voice);
     }, [workflowName, startNode, workflowConfigurations]);
 
@@ -258,12 +258,7 @@ export function SimpleWorkflowView({
                                                     <SelectValue placeholder="Select a voice" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="alloy">Alloy (Neutral, Professional)</SelectItem>
-                                                    <SelectItem value="echo">Echo (Warm, Friendly)</SelectItem>
-                                                    <SelectItem value="fable">Fable (Expressive, British)</SelectItem>
-                                                    <SelectItem value="onyx">Onyx (Deep, Authoritative)</SelectItem>
-                                                    <SelectItem value="nova">Nova (Energetic, Female)</SelectItem>
-                                                    <SelectItem value="shimmer">Shimmer (Clear, Female)</SelectItem>
+                                                    <SelectItem value="default">Default Voice</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </div>
