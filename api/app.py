@@ -29,6 +29,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 from fastapi.responses import JSONResponse
 from loguru import logger
 
@@ -106,6 +107,8 @@ app = FastAPI(
         {"url": "http://localhost:8000", "description": "Local development"},
     ],
 )
+
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
 
 @app.exception_handler(MPSUnavailableError)
