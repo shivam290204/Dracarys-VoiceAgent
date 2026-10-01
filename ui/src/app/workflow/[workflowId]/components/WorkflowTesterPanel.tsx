@@ -33,6 +33,7 @@ interface WorkflowTesterPanelProps {
     className?: string;
     onClose?: () => void;
     onRuntimeNodeTransition?: (transition: WorkflowRuntimeNodeTransition) => void;
+    onPhoneCallClick?: () => void;
 }
 
 export function WorkflowTesterPanel({
@@ -45,6 +46,7 @@ export function WorkflowTesterPanel({
     className,
     onClose,
     onRuntimeNodeTransition,
+    onPhoneCallClick,
 }: WorkflowTesterPanelProps) {
     const auth = useAuth();
     const { markActionCompleted } = useOnboarding();
@@ -173,6 +175,18 @@ export function WorkflowTesterPanel({
                                 Test Chat
                             </TabsTrigger>
                         </TabsList>
+                        {onPhoneCallClick ? (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={onPhoneCallClick}
+                                className="shrink-0 h-9 px-3 gap-2 text-muted-foreground hover:bg-muted/60 hover:text-foreground rounded-lg"
+                                disabled={disabled}
+                            >
+                                <Phone className="h-4 w-4" />
+                                <span className="text-sm font-medium">Phone Call</span>
+                            </Button>
+                        ) : null}
                         {onClose ? (
                             <Button
                                 variant="ghost"

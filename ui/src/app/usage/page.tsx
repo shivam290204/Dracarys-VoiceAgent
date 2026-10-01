@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Download, Globe } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, Download, Globe, PhoneCall, Bot, Clock, Zap } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import TimezoneSelect, { type ITimezoneOption } from 'react-timezone-select';
@@ -440,6 +440,16 @@ export default function UsagePage() {
         return `${minutes}m ${remainingSeconds}s`;
     };
 
+    const successRate = useMemo(() => {
+        if (!usageHistory || usageHistory.runs.length === 0) return 0;
+        const totalDispositions = usageHistory.runs.filter(r => r.disposition).length;
+        if (totalDispositions === 0) return 0;
+        const successfulCalls = usageHistory.runs.filter(r => 
+            r.disposition && ['ANSWERED', 'COMPLETED', 'answered', 'completed'].includes(r.disposition)
+        ).length;
+        return (successfulCalls / totalDispositions) * 100;
+    }, [usageHistory]);
+
     return (
         <div className="container mx-auto p-6 space-y-6">
             <div>
@@ -522,6 +532,57 @@ export default function UsagePage() {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {/* Key Metrics */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <Card className="bg-[#1a1a1a] border-[#2a2a2a]">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">Total Calls</CardTitle>
+                            <PhoneCall className="h-4 w-4 text-emerald-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold text-white">
+                                {isLoadingHistory ? '-' : (usageHistory?.total_count || 0).toLocaleString()}
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="bg-[#1a1a1a] border-[#2a2a2a]">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">Active Agents</CardTitle>
+                            <Bot className="h-4 w-4 text-purple-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold text-white">
+                                {isLoadingAgentFilterOptions ? '-' : (agentFilterOptions?.length || 0)}
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="bg-[#1a1a1a] border-[#2a2a2a]">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">Minutes Used</CardTitle>
+                            <Clock className="h-4 w-4 text-blue-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold text-white">
+                                {isLoadingHistory ? '-' : Math.floor((usageHistory?.total_duration_seconds || 0) / 60).toLocaleString()}
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="bg-[#1a1a1a] border-[#2a2a2a]">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2">
+                            <CardTitle className="text-sm font-medium text-muted-foreground">Success Rate</CardTitle>
+                            <Zap className="h-4 w-4 text-orange-500" />
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-3xl font-bold text-white">
+                                {isLoadingHistory ? '-' : `${successRate.toFixed(1)}%`}
+                            </div>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 {/* Daily Usage Table - Only for paid organizations */}

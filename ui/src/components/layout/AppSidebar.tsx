@@ -70,16 +70,6 @@ const TELEPHONY_WARNING_COPY = "Action required";
 
 const NAV_SECTIONS: SidebarNavSection[] = [
   {
-    items: [
-      {
-        title: "Overview",
-        url: "/overview",
-        icon: Home,
-      },
-    ],
-  },
-
-  {
     label: "BUILD",
     items: [
       {
@@ -116,7 +106,7 @@ const NAV_SECTIONS: SidebarNavSection[] = [
     label: "MANAGE",
     items: [
       {
-        title: "Agent Runs",
+        title: "Overview",
         url: "/usage",
         icon: TrendingUp,
       },

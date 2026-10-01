@@ -584,8 +584,6 @@ function RenderWorkflow({
                     workflowUuid={workflowUuid}
                     saveWorkflow={guardedSaveWorkflow}
                     user={user}
-                    onPhoneCallClick={() => setIsPhoneCallDialogOpen(true)}
-                    onTestAgentClick={handleOpenTester}
                     onHistoryClick={handleOpenVersionPanel}
                     activeVersionLabel={activeVersionLabel}
                     isViewingHistoricalVersion={isViewingHistoricalVersion}
@@ -604,13 +602,6 @@ function RenderWorkflow({
                             {!isAdvancedMode ? (
                                 <SimpleWorkflowView
                                     workflowName={workflowName}
-                                    nodes={nodes}
-                                    setNodes={setNodes}
-                                    setIsDirty={setIsDirty}
-                                    saveWorkflow={guardedSaveWorkflow}
-                                    renameWorkflow={renameWorkflow}
-                                    workflowConfigurations={workflowConfigurations ?? undefined}
-                                    saveWorkflowConfigurations={saveWorkflowConfigurations}
                                     onGoToAdvanced={() => setIsAdvancedMode(true)}
                                     testerPanel={
                                         <WorkflowTesterPanel
@@ -621,6 +612,7 @@ function RenderWorkflow({
                                             showWebCallOnboarding={shouldShowWebCallOnboarding}
                                             isVisible={true}
                                             onRuntimeNodeTransition={handleRuntimeNodeTransition}
+                                            onPhoneCallClick={() => setIsPhoneCallDialogOpen(true)}
                                         />
                                     }
                                 />
@@ -778,37 +770,7 @@ function RenderWorkflow({
                             )}
                         </div>
 
-                        {isAdvancedMode && isTesterRailOpen && (
-                            <aside className="hidden h-full w-[400px] shrink-0 border-l border-border xl:block">
-                                <WorkflowTesterPanel
-                                    workflowId={workflowId}
-                                    initialContextVariables={templateContextVariables}
-                                    disabled={testerDisabledReason !== null}
-                                    disabledReason={testerDisabledReason}
-                                    showWebCallOnboarding={shouldShowWebCallOnboarding}
-                                    isVisible={isDesktopViewport}
-                                    onClose={() => setIsTesterRailOpen(false)}
-                                    onRuntimeNodeTransition={handleRuntimeNodeTransition}
-                                />
-                            </aside>
-                        )}
                     </div>
-
-                    {isAdvancedMode && (
-                        <Sheet open={isTesterSheetOpen} onOpenChange={setIsTesterSheetOpen}>
-                            <SheetContent side="right" className="w-full max-w-none p-0 sm:max-w-xl xl:hidden">
-                                <WorkflowTesterPanel
-                                    workflowId={workflowId}
-                                    initialContextVariables={templateContextVariables}
-                                    disabled={testerDisabledReason !== null}
-                                    disabledReason={testerDisabledReason}
-                                    showWebCallOnboarding={shouldShowWebCallOnboarding}
-                                    isVisible={isTesterSheetOpen}
-                                    onRuntimeNodeTransition={handleRuntimeNodeTransition}
-                                />
-                            </SheetContent>
-                        </Sheet>
-                    )}
                 </div>
 
                 <AddNodePanel

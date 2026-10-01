@@ -60,9 +60,6 @@ export default function SignupPage() {
 
   return (
     <AuthShell>
-      <div className="flex justify-center mb-6">
-        <BrandLogo mark className="h-12" />
-      </div>
       <div className="space-y-1.5 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
         <p className="text-sm text-muted-foreground">Enter your details to get started</p>

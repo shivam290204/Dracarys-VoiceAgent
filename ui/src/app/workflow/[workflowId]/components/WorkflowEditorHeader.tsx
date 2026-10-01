@@ -38,8 +38,6 @@ interface WorkflowEditorHeaderProps {
     workflowUuid?: string;
     saveWorkflow: (updateWorkflowDefinition?: boolean) => Promise<void>;
     user: { id: string; email?: string };
-    onPhoneCallClick: () => void;
-    onTestAgentClick: () => void;
     onHistoryClick: () => void;
     activeVersionLabel?: string;
     isViewingHistoricalVersion: boolean;
@@ -57,8 +55,6 @@ export const WorkflowEditorHeader = ({
     workflowValidationErrors,
     rfInstance,
     saveWorkflow,
-    onPhoneCallClick,
-    onTestAgentClick,
     onHistoryClick,
     activeVersionLabel,
     isViewingHistoricalVersion,
@@ -413,16 +409,6 @@ export const WorkflowEditorHeader = ({
                         )}
                     </Button>
                 )}
-
-                <Button
-                    variant="outline"
-                    className="flex items-center gap-2 bg-transparent border-[#3a3a3a] hover:bg-[#2a2a2a] text-white"
-                    onClick={onTestAgentClick}
-                >
-                    <Bot className="w-4 h-4" />
-                    Test Agent
-                </Button>
-
                 {/* Save button (only shown when editing the draft) */}
                 {!isViewingHistoricalVersion && (
                     <Button
@@ -490,19 +476,6 @@ export const WorkflowEditorHeader = ({
                     </DropdownMenuContent>
                 </DropdownMenu>
                 </>
-                )}
-
-                {!isViewingHistoricalVersion && (
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center gap-2 bg-transparent border-[#3a3a3a] hover:bg-[#2a2a2a] text-white h-8"
-                        disabled={isCallDisabled}
-                        onClick={onPhoneCallClick}
-                    >
-                        <Phone className="w-4 h-4" />
-                        Phone Call
-                    </Button>
                 )}
 
 

@@ -18,7 +18,7 @@ export function BrandLogo({
   if (mark) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src="/dragon_photo.png" alt="Dracarys" className={cn("w-auto select-none", className)} />
+      <img src="/Logo.jpg" alt="Dracarys" className={cn("w-auto select-none rounded-md", className)} />
     );
   }
   if (inverse) {

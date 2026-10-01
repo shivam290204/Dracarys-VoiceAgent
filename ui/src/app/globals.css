@@ -416,3 +416,18 @@
 [data-event-banner] [class~="min-h-svh"] {
   min-height: calc(100svh - var(--event-banner-h, 0px));
 }
+
+/* -- Dracarys firelight-flicker glow -- */
+@keyframes dracarys-flicker {
+  0%,100% { text-shadow: 0 0 24px rgba(255,120,30,0.55), 0 0 60px rgba(220,60,0,0.30); }
+  20%      { text-shadow: 0 0 32px rgba(255,140,20,0.70), 0 0 80px rgba(230,70,0,0.40); }
+  40%      { text-shadow: 0 0 18px rgba(255,100,10,0.45), 0 0 50px rgba(200,40,0,0.22); }
+  60%      { text-shadow: 0 0 28px rgba(255,130,25,0.62), 0 0 72px rgba(215,55,0,0.35); }
+  80%      { text-shadow: 0 0 22px rgba(255,110,15,0.50), 0 0 55px rgba(210,48,0,0.25); }
+}
+.dracarys-flicker {
+  animation: dracarys-flicker 3.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dracarys-flicker { animation: none; }
+}
